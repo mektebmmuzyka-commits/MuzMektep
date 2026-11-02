@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Компьютер және жасанды интеллект</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,700;1,400&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
+<style>
+:root{--w:min(42vw,310px);--h:calc(var(--w)*1.45);--fs:calc(var(--w)/23);box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;margin:0}
+body{overflow:hidden;font-family:'Noto Serif',Georgia,'Times New Roman',serif;color:#2e2418;user-select:none;
+ background:radial-gradient(ellipse at 50% 40%,#3b4a63,#161c28 75%)}
+.stage{height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:calc(var(--h)*.1)}
+.shift{transition:transform 1s cubic-bezier(.6,.05,.25,1);will-change:transform}
+.book{position:relative;width:var(--w);height:var(--h);perspective:2400px}
+.floor{position:absolute;left:calc(var(--w)*-1.1);width:calc(var(--w)*3.2);bottom:-30px;height:34px;background:radial-gradient(ellipse,rgba(0,0,0,.65),transparent 68%)}
+.board{position:absolute;top:-5px;bottom:-5px;width:calc(100% + 9px);z-index:0;transition:opacity .5s;
+ background:linear-gradient(135deg,#17335a,#0b1c36);box-shadow:0 3px 8px rgba(0,0,0,.5)}
+.bR{left:0;border-radius:0 8px 8px 0}.bL{right:100%;margin-right:-100%;left:-9px;border-radius:8px 0 0 8px;opacity:0}
+.blk{position:absolute;top:1px;bottom:1px;z-index:0;width:calc(var(--t)*1.1px);background:repeating-linear-gradient(90deg,#f5ebd0 0 1px,#b9a87a 1px 2px);transition:width 1s}
+.kR{left:calc(100% - 1px);border-radius:0 2px 2px 0}.kL{right:calc(100% - 1px);border-radius:2px 0 0 2px}
+.leaf{position:absolute;inset:0;transform-origin:left center;transform-style:preserve-3d;transition:transform 1s cubic-bezier(.55,.05,.2,1);will-change:transform}
+.leaf.flipped{transform:rotateY(-180deg)}
+.face{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;overflow:hidden;font-size:var(--fs);line-height:1.5}
+.back{transform:rotateY(180deg)}
+.page{background:repeating-linear-gradient(0deg,rgba(110,85,40,.04) 0 1px,transparent 1px 3px),linear-gradient(#f6ecd1,#ecdab0);padding:8% 9% 11% 11%}
+.page.back{padding:8% 11% 11% 9%}
+.page::before{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(90deg,rgba(40,20,0,.4),rgba(40,20,0,.08) 8%,transparent 18%)}
+.page.back::before{background:linear-gradient(270deg,rgba(40,20,0,.4),rgba(40,20,0,.08) 8%,transparent 18%)}
+h2{font-family:'Playfair Display',Georgia,serif;font-size:1.45em;margin:0 0 .55em;color:#0f2a52;line-height:1.15}
+h2 i{display:inline-grid;place-items:center;width:1.7em;height:1.7em;margin-right:.4em;border-radius:50%;background:#0f2a52;font-style:normal;font-size:.85em;vertical-align:middle;box-shadow:0 0 0 2px #c9a24a inset}
+p{margin:0 0 .65em;text-align:justify;hyphens:auto}
+.drop::first-letter{font-family:'Playfair Display',serif;float:left;font-size:2.9em;line-height:.85;padding:.05em .08em 0 0;color:#a3321f;font-weight:900}
+ul{list-style:none;margin:0;padding:0}
+li{display:flex;gap:.6em;align-items:flex-start;margin-bottom:.5em;font-size:.95em}
+li b{flex:0 0 1.9em;height:1.9em;display:grid;place-items:center;border-radius:.45em;background:#e3d2a2;box-shadow:0 1px 0 #fff8 inset,0 1px 2px #0003;font-weight:400}
+.note{margin-top:.6em;padding:.55em .7em;border-left:3px solid #c9a24a;background:#0f2a520d;font-style:italic;font-size:.92em}
+.code{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:.82em;background:#0f1d33;color:#8fe3b0;padding:.6em .7em;border-radius:5px;margin:.4em 0 .7em;line-height:1.45;white-space:pre}
+.big{font-size:3.4em;text-align:center;margin:.1em 0}
+.nn{display:block;width:100%;margin:.3em 0}
+.num{position:absolute;bottom:4.5%;left:0;right:0;text-align:center;font-size:.8em;color:#8a6a3a}
+.vis>*{animation:rise .7s .45s both ease-out}
+.vis>*:nth-child(2){animation-delay:.6s}.vis>*:nth-child(3){animation-delay:.75s}.vis>*:nth-child(4){animation-delay:.9s}.vis>*:nth-child(5){animation-delay:1s}
+@keyframes rise{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.cover{inset:-5px -9px -5px 0;border-radius:3px 8px 8px 3px;color:#e6c777;
+ background:radial-gradient(circle,rgba(0,0,0,.14) 1px,transparent 1.5px) 0 0/4px 4px,radial-gradient(circle at 30% 18%,rgba(255,255,255,.16),transparent 55%),linear-gradient(135deg,#1b3d6d,#0b1c36 75%)}
+.cover.back{inset:-5px 0 -5px -9px;border-radius:8px 3px 3px 8px}
+.cover::before{content:"";position:absolute;left:0;top:0;bottom:0;width:8%;background:linear-gradient(90deg,rgba(0,0,0,.6),rgba(255,255,255,.1) 50%,rgba(0,0,0,.35))}
+.cover.back::before{left:auto;right:0;transform:scaleX(-1)}
+.cover::after{content:"";position:absolute;inset:6% 6% 6% 13%;border:2px solid #e6c777aa;outline:1px solid #e6c77755;outline-offset:4px}
+.cover.back::after{inset:6% 13% 6% 6%}
+.cin{position:absolute;inset:11% 9% 11% 16%;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;z-index:2}
+.cover.back .cin{inset:11% 16% 11% 9%}
+.cin h1{font-family:'Playfair Display',serif;font-size:1.65em;margin:.5em 0 .3em;line-height:1.2;letter-spacing:.04em;color:#f1d28a;text-shadow:0 -1px 0 #000a,0 1px 0 #ffe9a855}
+.cin small{font-size:.8em;letter-spacing:.1em;color:#d9b565;font-style:italic}
+.cin svg{width:62%}
+.endp{background:linear-gradient(#e9d6a8,#d6bb80);display:grid;place-items:center;color:#0f2a52;font-size:3em}
+.ctl{display:flex;align-items:center;gap:16px;color:#d6dcea;font:14px system-ui,sans-serif}
+.ctl button{width:44px;height:44px;border-radius:50%;border:1px solid #e6c777aa;background:#0006;color:#f1d28a;font-size:22px;cursor:pointer}
+.ctl button:active{background:#e6c77744}.ctl button:disabled{opacity:.3}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute"><symbol id="chip" viewBox="0 0 100 100"><g fill="none" stroke="#e6c777" stroke-width="2.4" stroke-linecap="round"><rect x="28" y="28" width="44" height="44" rx="4"/><rect x="40" y="40" width="20" height="20"/><path d="M36 28V12M50 28V8M64 28V12M36 72v16M50 72v20M64 72v16M28 36H12M28 50H8M28 64H12M72 36h16M72 50h20M72 64h16"/></g><g fill="#e6c777"><circle cx="36" cy="12" r="2.6"/><circle cx="50" cy="8" r="2.6"/><circle cx="64" cy="12" r="2.6"/><circle cx="12" cy="36" r="2.6"/><circle cx="8" cy="50" r="2.6"/><circle cx="92" cy="50" r="2.6"/><circle cx="64" cy="88" r="2.6"/></g></symbol></svg>
+<div class="stage">
+ <div class="shift" id="shift"><div class="book" id="book">
+  <div class="floor"></div>
+  <div class="board bR" id="bR"></div><div class="board bL" id="bL"></div>
+  <div class="blk kR" id="kR"></div><div class="blk kL" id="kL"></div>
+
+  <div class="leaf">
+   <div class="face front cover"><div class="cin"><svg><use href="#chip"/></svg><h1>КОМПЬЮТЕР<br>ЖӘНЕ ЖАСАНДЫ<br>ИНТЕЛЛЕКТ</h1><small>Технология кітабы</small></div></div>
+   <div class="face back page"><div class="big">🖥️</div><p style="text-align:center;font-style:italic">Білім — болашақтың кілті.<br>Үйреніп, ойлан, жаса!</p></div>
+  </div>
+
+  <div class="leaf">
+   <div class="face front page"><h2><i>💻</i>Компьютер</h2><p class="drop">Компьютер — ақпаратты өңдейтін электрондық құрылғы. Ол сандарды есептейді, мәтін жазады, сурет салады және бейне көрсетеді.</p><p>Қазіргі өмірді компьютерсіз елестету мүмкін емес: оқуда, емханада, зауытта, үйде — барлық жерде ол адамға көмектеседі.</p><div class="note">1940 жылдардағы алғашқы компьютерлер үлкен бөлмені алатын.</div><div class="num">1</div></div>
+   <div class="face back page"><h2><i>⚙️</i>Құрылғы бөліктері</h2><ul><li><b>🧠</b><span><strong>Процессор</strong> — компьютердің «миы», барлық есепті орындайды.</span></li><li><b>🧩</b><span><strong>Жедел жады (RAM)</strong> — уақытша жад.</span></li><li><b>💾</b><span><strong>Қатты диск</strong> — деректерді сақтайды.</span></li><li><b>🖥️</b><span><strong>Монитор</strong> — суретті көрсетеді.</span></li><li><b>⌨️</b><span><strong>Пернетақта, тінтуір</strong> — енгізу құралдары.</span></li></ul><div class="num">2</div></div>
+  </div>
+
+  <div class="leaf">
+   <div class="face front page"><h2><i>👨‍💻</i>Бағдарлама</h2><p class="drop">Бағдарлама — компьютерге берілетін нұсқаулар жиынтығы. Бағдарламашы код жазады, ал компьютер оны қадам-қадаммен орындайды.</p><div class="code">print("Сәлем, әлем!")
+for i in range(3):
+    print("Сан:", i)</div><p>Ең танымал тілдер: Python, JavaScript, C++.</p><div class="num">3</div></div>
+   <div class="face back page"><h2><i>🌐</i>Интернет</h2><p class="drop">Интернет — дүние жүзіндегі миллиардтаған құрылғыны байланыстыратын желі. Ол арқылы біз хат жазамыз, оқимыз, ойнаймыз және білім аламыз.</p><ul><li><b>📧</b><span>Электрондық пошта</span></li><li><b>🔎</b><span>Ақпарат іздеу</span></li><li><b>🎓</b><span>Онлайн оқу</span></li></ul><div class="note">Интернетте жеке деректерді қорғау — әркімнің міндеті.</div><div class="num">4</div></div>
+  </div>
+
+  <div class="leaf">
+   <div class="face front page"><h2><i>🤖</i>Жасанды интеллект</h2><p class="drop">Жасанды интеллект (ЖИ) — адамның ойлау қабілетін үлгі ететін компьютерлік жүйе. Ол мысалдардан үйренеді, заңдылықтарды табады және шешім ұсынады.</p><p>Мысалы, ЖИ суреттегі мысықты танып, мәтінді аударып, сұраққа жауап бере алады.</p><div class="big">🧠 ⚡ 🤖</div><div class="num">5</div></div>
+   <div class="face back page"><h2><i>🕸️</i>Нейрондық желі</h2><svg class="nn" id="nn" viewBox="0 0 220 120"></svg><p>Нейрондық желі адам миының жасушаларына ұқсас түйіндерден тұрады. Көп мысал көрген сайын ол дәлірек жауап береді.</p><div class="num">6</div></div>
+  </div>
+
+  <div class="leaf">
+   <div class="face front page"><h2><i>🌍</i>ЖИ қайда қолданылады?</h2><ul><li><b>🏥</b><span><strong>Медицина</strong> — аурудың белгісін ерте анықтайды.</span></li><li><b>🚗</b><span><strong>Көлік</strong> — өздігінен жүретін машиналар.</span></li><li><b>🗣️</b><span><strong>Тіл</strong> — аударма және чат-боттар.</span></li><li><b>🎨</b><span><strong>Өнер</strong> — сурет пен музыка жасайды.</span></li><li><b>🌾</b><span><strong>Ауыл шаруашылығы</strong> — егін өнімін болжайды.</span></li></ul><div class="num">7</div></div>
+   <div class="face back page"><h2><i>💡</i>Болашақ</h2><p class="drop">ЖИ — қуатты көмекші, бірақ соңғы шешімді адам қабылдайды. Жеке деректерді қорғау, жалған ақпаратпен күресу және әділдік — маңызды міндеттер.</p><p>Білімді адам технологияны ақылмен пайдаланады. Сондықтан үйреніп, сұрақ қойып, жаңалыққа ашық бол!</p><div class="note">«Техника — құрал, ал ақыл — иесі.»</div><div class="num">8</div></div>
+  </div>
+
+  <div class="leaf">
+   <div class="face front endp">❖</div>
+   <div class="face back cover"><div class="cin"><svg><use href="#chip"/></svg><small>Соңы</small></div></div>
+  </div>
+ </div></div>
+ <div class="ctl"><button id="prev" aria-label="Артқа">‹</button><span id="info"></span><button id="next" aria-label="Алға">›</button></div>
+</div>
+<script>
+const leaves=[...document.querySelectorAll('.leaf')],N=leaves.length,$=id=>document.getElementById(id);
+let n=0,busy=false;
+const nn=$('nn'),L=[[3,'#c9a24a'],[4,'#0f2a52'],[4,'#0f2a52'],[2,'#a3321f']];let s='';
+const pos=L.map(([c],i)=>Array.from({length:c},(_,j)=>[25+i*57,60+(j-(c-1)/2)*26]));
+for(let i=0;i<3;i++)for(const a of pos[i])for(const b of pos[i+1])s+=`<line x1="${a[0]}" y1="${a[1]}" x2="${b[0]}" y2="${b[1]}" stroke="#0f2a5255" stroke-width="1"/>`;
+pos.forEach((p,i)=>p.forEach(q=>s+=`<circle cx="${q[0]}" cy="${q[1]}" r="7" fill="${L[i][1]}"/>`));nn.innerHTML=s;
+function z(i){return i<n?i+1:N-i+1}
+function render(){
+ leaves.forEach((l,i)=>{l.classList.toggle('flipped',i<n);l.style.zIndex=z(i);
+  l.firstElementChild.classList.toggle('vis',i===n);l.lastElementChild.classList.toggle('vis',i===n-1)});
+ $('shift').style.transform='translateX(calc(var(--w) * '+(n===0?0:n===N?1:.5)+'))';
+ $('kR').style.setProperty('--t',(N-n)*1.1);$('kL').style.setProperty('--t',n*1.1);
+ $('bL').style.opacity=n>0?1:0;$('bR').style.opacity=n===N?0:1;
+ $('prev').disabled=n===0;$('next').disabled=n===N;
+ $('info').textContent=n===0?'Ашу үшін басыңыз':n===N?'Кітап жабылды':'Бет '+(2*n-1)+' – '+(2*n);
+}
+function go(d){
+ if(busy||n+d<0||n+d>N)return;busy=true;
+ const l=leaves[d>0?n:n-1];n+=d;render();l.style.zIndex=100;
+ setTimeout(()=>{l.style.zIndex=z(leaves.indexOf(l));busy=false},1000);
+}
+$('next').onclick=()=>go(1);$('prev').onclick=()=>go(-1);
+$('book').onclick=e=>go(e.clientX>$('book').getBoundingClientRect().left?1:-1);
+addEventListener('keydown',e=>{if(e.key==='ArrowRight')go(1);if(e.key==='ArrowLeft')go(-1)});
+let sx=0;addEventListener('touchstart',e=>sx=e.touches[0].clientX,{passive:true});
+addEventListener('touchend',e=>{const d=e.changedTouches[0].clientX-sx;if(Math.abs(d)>50)go(d<0?1:-1)},{passive:true});
+render();
+</script>
+</body>
+</html>
