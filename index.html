@@ -2,7 +2,7 @@
 <html lang="kk">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
 <title>ТЕХНО — журнал</title>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;700;900&family=Noto+Serif:ital@1&display=swap" rel="stylesheet">
 <style>
@@ -11,11 +11,11 @@
 html,body{height:100%;margin:0}
 body{overflow:hidden;font-family:'Noto Sans',system-ui,Arial,sans-serif;color:var(--nv);user-select:none;touch-action:none;
  background:radial-gradient(ellipse at 50% 30%,#e9e4da,#b9b2a4 80%)}
-.stage{height:100dvh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+.stage{position:fixed;left:0;right:0;top:0;bottom:0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
 #src{display:none}
 .win{position:relative}
 .floor{position:absolute;left:-5%;right:-5%;bottom:-18px;height:30px;background:radial-gradient(ellipse,rgba(0,0,0,.45),transparent 68%);pointer-events:none}
-#fit{position:absolute;left:0;top:0;height:490px;transform-origin:0 0;perspective:2200px}
+#fit{position:absolute;left:0;top:0;height:490px;transform-origin:0 0;perspective:3000px}
 #book{position:absolute;top:0;width:360px;height:490px;transform-style:preserve-3d}
 .leaf{position:absolute;left:0;top:0;width:360px;height:490px;transform-origin:left center;transform-style:preserve-3d;will-change:transform}
 .face{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;overflow:hidden}
@@ -81,7 +81,7 @@ body{overflow:hidden;font-family:'Noto Sans',system-ui,Arial,sans-serif;color:va
 </head>
 <body>
 <svg width="0" height="0" style="position:absolute"><symbol id="bot" viewBox="0 0 100 100"><g stroke="#fff" stroke-width="3" stroke-linecap="round"><path d="M50 8v12" fill="none"/><circle cx="50" cy="7" r="4" fill="#ffd23f"/><rect x="22" y="20" width="56" height="46" rx="13" fill="#1c1245"/><rect x="13" y="34" width="9" height="18" rx="3" fill="#ff3d6e"/><rect x="78" y="34" width="9" height="18" rx="3" fill="#ff3d6e"/><circle cx="38" cy="42" r="7" fill="#5ef0ff"/><circle cx="62" cy="42" r="7" fill="#5ef0ff"/><path d="M39 56h22" fill="none"/><rect x="30" y="70" width="40" height="22" rx="8" fill="#1c1245"/><circle cx="50" cy="81" r="4" fill="#ffd23f" stroke="none"/></g></symbol><symbol id="pc" viewBox="0 0 120 90"><g stroke="#fff" stroke-width="3"><rect x="14" y="6" width="92" height="58" rx="6" fill="#14103a"/><rect x="52" y="64" width="16" height="8" fill="#fff"/><rect x="24" y="74" width="72" height="11" rx="3" fill="#fff"/></g><rect x="20" y="12" width="80" height="46" fill="#1d2f6b"/><rect x="26" y="20" width="30" height="4" fill="#5ef0ff"/><rect x="26" y="29" width="48" height="4" fill="#ffd23f"/><rect x="34" y="38" width="38" height="4" fill="#ff3d6e"/><rect x="26" y="47" width="24" height="4" fill="#7dffb2"/></symbol><symbol id="globe" viewBox="0 0 100 100"><g stroke="#fff" stroke-width="2.5" fill="none"><circle cx="50" cy="50" r="36" fill="#0b4f8a"/><ellipse cx="50" cy="50" rx="16" ry="36"/><path d="M14 50h72M20 30h60M20 70h60"/><path d="M50 50L12 14M50 50l40-10M50 50l34 40M50 50L14 88" stroke="#ffd23f"/></g><g fill="#ffd23f"><circle cx="12" cy="14" r="5"/><circle cx="90" cy="40" r="5"/><circle cx="84" cy="90" r="5"/><circle cx="14" cy="88" r="5"/></g></symbol><symbol id="bulb" viewBox="0 0 100 100"><circle cx="50" cy="42" r="24" fill="#ffd23f"/><rect x="40" y="64" width="20" height="12" rx="3" fill="#fff"/><rect x="43" y="78" width="14" height="6" rx="2" fill="#ddd"/><path d="M50 6v8M14 20l6 6M86 20l-6 6M6 42h8M94 42h-8" stroke="#fff" stroke-width="3" stroke-linecap="round"/></symbol></svg>
-<div class="stage">
+<div class="stage" id="stage">
 <div id="src">
 
 <section class="pg cv"><i class="stp" style="top:24%"></i><i class="stp" style="top:74%"></i>
@@ -150,7 +150,8 @@ function ind(){const ok=i=>i>=1&&i<=M-2,a=sp?2*n-1:n,b=sp?2*n:n;
  $('ind').innerHTML=(n===0&&!hinted)?'<div id="hint"><i>←</i>Бастау үшін солға сырғытыңыз</div>':
   (sp?[a,b].filter(ok).join(' – '):ok(n)?n:'')+(ok(a)||ok(b)?' / '+(M-2):'')}
 function layout(){
- const W=innerWidth-8,H=innerHeight-80,s1=Math.min(W/PW,H/PH),s2=Math.min(W/(2*PW),H/PH),nsp=innerWidth>innerHeight&&s2>=s1*.85;
+ const st=$('stage'),cs=getComputedStyle(st),sw=st.clientWidth,sh=st.clientHeight-(parseFloat(cs.paddingTop)||0)-(parseFloat(cs.paddingBottom)||0),
+  W=Math.max(100,sw-24),H=Math.max(100,sh-56-24),s1=Math.min(W/PW,H/PH),s2=Math.min(W/(2*PW),H/PH),nsp=sw>st.clientHeight&&s2>=s1*.85;
  if(nsp!==sp){if(sp!==null)n=sp?Math.min(2*n,M-1):Math.ceil(n/2);sp=nsp;build();t=tgt=n;mark()}
  s=Math.min(2.2,sp?s2:s1);const w=(sp?2:1)*PW;
  win.style.width=w*s+'px';win.style.height=PH*s+'px';fit.style.width=w+'px';fit.style.transform=`scale(${s})`;
@@ -171,7 +172,10 @@ B.onpointerup=B.onpointercancel=e=>{if(!dr)return;const o=dr,base=Math.round(o.t
  if(o.m<8&&e.type==='pointerup')go(base+(e.clientX>innerWidth*(sp?.5:.4)?1:-1));
  else go(mv>.25||(o.v<-.5&&mv>0)?base+1:mv<-.25||(o.v>.5&&mv<0)?base-1:base)};
 addEventListener('keydown',e=>{if(e.key==='ArrowRight'||e.key===' ')go(tgt+1);if(e.key==='ArrowLeft')go(tgt-1)});
-addEventListener('resize',layout);addEventListener('orientationchange',()=>setTimeout(layout,200));
+addEventListener('resize',layout);addEventListener('orientationchange',()=>setTimeout(layout,250));
+if(window.visualViewport)visualViewport.addEventListener('resize',layout);
+if(window.ResizeObserver)new ResizeObserver(layout).observe($('stage'));
+addEventListener('load',layout);setTimeout(layout,150);setTimeout(layout,600);
 layout();
 </script>
 </body>
