@@ -10,81 +10,170 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
 <style>
-/* ================= БАЗА ================= */
+/* ================= БАЗА (Золотая осень) ================= */
 :root{
-  /* Благородная палитра: глубокий синий + золотой */
-  --primary:#1e3a8a; 
-  --primary-hover:#1e40af;
-  --primary-soft:rgba(30,58,138,.08);
-  --accent:#d97706; 
+  --primary:#b8860b;
+  --primary-hover:#9a6f0a;
+  --primary-soft:rgba(184,134,11,.12);
+  --accent:#d4af37;
   
-  --pdf:#e11d48; --pdf-soft:rgba(225,29,72,.08);
-  --word:#2563eb; --word-soft:rgba(37,99,235,.08);
-  --ppt:#7c3aed; --ppt-soft:rgba(124,58,237,.08);
+  --pdf:#c0392b; --pdf-soft:rgba(192,57,43,.10);
+  --word:#2980b9; --word-soft:rgba(41,128,185,.10);
+  --ppt:#8e44ad; --ppt-soft:rgba(142,68,173,.10);
   
-  --bg:#f8fafc; 
+  --bg:#fffaf0;
   --surface:#ffffff; 
-  --surface-2:#f1f5f9; 
-  --text:#0f172a; 
-  --text-muted:#64748b; 
-  --border:#e2e8f0;
+  --surface-2:#fdf5e6;
+  --text:#2c1e12; 
+  --text-muted:#7a6a5a; 
+  --border:#eaddcf;
   
   --radius:20px; 
   --radius-sm:14px;
-  --shadow-sm:0 2px 4px rgba(15,23,42,.04); 
-  --shadow:0 10px 30px -10px rgba(15,23,42,.08); 
-  --shadow-lg:0 30px 60px -15px rgba(15,23,42,.15);
+  --shadow-sm:0 2px 4px rgba(120,53,15,.06); 
+  --shadow:0 10px 30px -10px rgba(120,53,15,.12); 
+  --shadow-lg:0 30px 60px -15px rgba(120,53,15,.2);
   
   --container:1160px; 
   --header-h:84px;
 }
+
 [data-theme="dark"]{
-  --primary:#3b82f6; 
-  --primary-hover:#60a5fa;
-  --primary-soft:rgba(59,130,246,.15);
-  --accent:#fbbf24;
+  --primary:#d4af37; 
+  --primary-hover:#f0e68c;
+  --primary-soft:rgba(212,175,55,.15);
+  --accent:#f0e68c;
   
-  --pdf:#fb7185; --pdf-soft:rgba(251,113,133,.15);
-  --word:#60a5fa; --word-soft:rgba(96,165,250,.15);
-  --ppt:#a78bfa; --ppt-soft:rgba(167,139,250,.15);
+  --pdf:#e74c3c; --pdf-soft:rgba(231,76,60,.15);
+  --word:#3498db; --word-soft:rgba(52,152,219,.15);
+  --ppt:#9b59b6; --ppt-soft:rgba(155,89,182,.15);
   
-  --bg:#0b1120; 
-  --surface:#131c31; 
-  --surface-2:#1b2540; 
-  --text:#e8edf7; 
-  --text-muted:#94a3b8; 
-  --border:#243147;
+  --bg:#1a150e;
+  --surface:#221b13; 
+  --surface-2:#2e251a; 
+  --text:#f5e6d3; 
+  --text-muted:#a89888; 
+  --border:#3f3226;
   
-  --shadow-sm:0 2px 4px rgba(0,0,0,.2); 
-  --shadow:0 10px 30px -10px rgba(0,0,0,.4); 
-  --shadow-lg:0 30px 60px -15px rgba(0,0,0,.6);
+  --shadow-sm:0 2px 4px rgba(0,0,0,.3); 
+  --shadow:0 10px 30px -10px rgba(0,0,0,.5); 
+  --shadow-lg:0 30px 60px -15px rgba(0,0,0,.7);
 }
 
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
-body{font-family:'Inter',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;background:var(--bg);color:var(--text);line-height:1.6;-webkit-font-smoothing:antialiased;transition:background .3s ease,color .3s ease;}
+body{
+  font-family:'Inter',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
+  background:var(--bg);color:var(--text);line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+  transition:background .3s ease,color .3s ease;
+  overflow-x:hidden;
+}
+
+/* ================= ФОН ================= */
+body::before {
+    content: '';
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background-image: url('img/background.jpeg');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    opacity: 0.35;
+    z-index: -1;
+    pointer-events: none;
+    transition: opacity .3s ease, filter .3s ease;
+}
+[data-theme="dark"] body::before {
+    opacity: 0.1;
+    filter: brightness(0.4);
+}
+
 img,svg{display:block;max-width:100%}
 a{color:inherit;text-decoration:none}
 button{font:inherit;cursor:pointer;border:none;background:none;color:inherit}
 .container{width:100%;max-width:var(--container);margin-inline:auto;padding-inline:24px;}
 
+/* ================= ПАДАЮЩИЕ ЛЕПЕСТКИ ================= */
+.leaves-container{
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  z-index:9999;
+  overflow:hidden;
+  perspective: 800px;
+}
+
+.leaf{
+  position:absolute;
+  top:-100px;
+  animation-name:leafFall;
+  animation-timing-function:linear;
+  animation-iteration-count:infinite;
+  user-select:none;
+  filter:drop-shadow(0 4px 6px rgba(120,53,15,.25));
+  will-change:transform;
+  transform-style: preserve-3d;
+}
+
+.leaf img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+@keyframes leafFall{
+  0% {
+    transform: translate3d(0, -100px, 0) rotateX(0deg) rotateY(0deg) rotateZ(-25deg);
+    opacity: 0;
+  }
+  8% { opacity: 1; }
+  25% {
+    transform: translate3d(var(--sway), 25vh, 40px) rotateX(180deg) rotateY(90deg) rotateZ(45deg);
+  }
+  50% {
+    transform: translate3d(calc(var(--sway) * -0.5), 50vh, -20px) rotateX(360deg) rotateY(180deg) rotateZ(-15deg);
+  }
+  75% {
+    transform: translate3d(var(--sway), 75vh, 30px) rotateX(540deg) rotateY(270deg) rotateZ(60deg);
+  }
+  92% { opacity: 1; }
+  100% {
+    transform: translate3d(0, 110vh, 0) rotateX(720deg) rotateY(360deg) rotateZ(-30deg);
+    opacity: 0;
+  }
+}
+
 /* ================= ХЕДЕР ================= */
-.header{position:sticky;top:0;z-index:100;height:var(--header-h);background:color-mix(in srgb,var(--bg) 85%,transparent);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid var(--border);transition:all .3s ease;}
+.header{
+  position:sticky;top:0;z-index:100;
+  height:var(--header-h);
+  background:color-mix(in srgb,var(--bg) 85%,transparent);
+  backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
+  border-bottom:1px solid var(--border);
+  transition:all .3s ease;
+}
 .header__inner{height:100%;display:flex;align-items:center;justify-content:space-between;gap:24px;}
 
-.logo{display:flex;align-items:center;gap:16px;text-decoration:none;transition:transform .2s ease;}
+.logo{display:flex;align-items:center;gap:16px;transition:transform .2s ease;}
 .logo:hover{transform:translateY(-1px);}
-.logo__img{width:56px;height:56px;object-fit:contain;border-radius:50%;flex-shrink:0;filter:drop-shadow(0 4px 6px rgba(0,0,0,0.1));}
+.logo__img{width:56px;height:56px;object-fit:contain;border-radius:50%;flex-shrink:0;filter:drop-shadow(0 4px 8px rgba(120,53,15,0.25));}
 .logo__text{display:flex;flex-direction:column;justify-content:center;}
 .logo__text strong{font-size:17px;font-weight:800;color:var(--text);letter-spacing:-.02em;line-height:1.2;}
 .logo__text span{font-size:13px;font-weight:600;color:var(--text-muted);line-height:1.2;margin-top:2px;}
 
 .nav{display:flex;align-items:center;gap:8px}
-.nav__link{padding:10px 16px;border-radius:12px;font-size:15px;font-weight:600;color:var(--text-muted);transition:all .2s ease;}
-.nav__link:hover{color:var(--primary);background:var(--primary-soft);}
+.nav__link{padding:10px 20px;border-radius:12px;font-size:15px;font-weight:600;color:var(--text-muted);transition:all .2s ease;}
+.nav__link:hover, .nav__link.active{color:var(--primary);background:var(--primary-soft);}
 
 .header__actions{display:flex;align-items:center;gap:12px}
-.icon-btn{width:44px;height:44px;border-radius:14px;display:grid;place-items:center;border:1px solid var(--border);background:var(--surface);color:var(--text-muted);transition:all .2s ease;}
+.icon-btn{
+  width:44px;height:44px;border-radius:14px;
+  display:grid;place-items:center;
+  border:1px solid var(--border);background:var(--surface);
+  color:var(--text-muted);transition:all .2s ease;
+}
 .icon-btn:hover{color:var(--primary);border-color:var(--primary);background:var(--primary-soft);}
 .icon-btn svg{width:20px;height:20px}
 
@@ -98,26 +187,39 @@ button{font:inherit;cursor:pointer;border:none;background:none;color:inherit}
 
 /* ================= HERO ================= */
 .hero{position:relative;overflow:hidden;padding:72px 0 64px;text-align:center;}
-.hero::before{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(800px 400px at 50% -20%,var(--primary-soft),transparent 80%);}
+.hero::before{
+  content:"";position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(900px 500px at 50% -20%,rgba(212,175,55,.15),transparent 80%);
+}
 .hero__inner{position:relative;max-width:800px;margin:0 auto;}
 .hero h1{font-size:clamp(28px,4vw,48px);line-height:1.15;letter-spacing:-.04em;font-weight:800;margin-bottom:20px;}
-.grad{background:linear-gradient(135deg,var(--primary),var(--accent));-webkit-background-clip:text;background-clip:text;color:transparent;display:inline-block;}
+.grad{
+  background:linear-gradient(135deg,#b8860b,#d4af37,#cd853f);
+  -webkit-background-clip:text;background-clip:text;color:transparent;display:inline-block;
+}
+[data-theme="dark"] .grad{
+  background:linear-gradient(135deg,#d4af37,#f0e68c,#cd853f);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+}
 .hero__text{font-size:18px;color:var(--text-muted);max-width:640px;margin:0 auto;line-height:1.7;}
 
 /* ================= КАТАЛОГ ================= */
 .section{padding:20px 0 100px;}
 .section__head{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:32px;}
 .section__title{font-size:24px;font-weight:800;letter-spacing:-.02em;color:var(--text);}
-.section__count{font-size:15px;color:var(--text-muted);font-weight:600;background:var(--surface-2);padding:6px 14px;border-radius:999px;}
+.section__count{font-size:15px;color:var(--primary);font-weight:700;background:var(--primary-soft);padding:6px 14px;border-radius:999px;}
 
 .teachers{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:28px;}
 
-/* Плавное появление карточек */
 .teacher{
-  background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);
-  padding:28px;box-shadow:var(--shadow-sm);display:flex;flex-direction:column;
+  background:color-mix(in srgb, var(--surface) 92%, transparent);
+  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+  border:1px solid var(--border);border-radius:var(--radius);
+  padding:28px;box-shadow:var(--shadow-sm);
+  display:flex;flex-direction:column;
   transition:all .3s cubic-bezier(0.4, 0, 0.2, 1);
   animation:fadeUp .6s ease backwards;
+  position:relative;
 }
 @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
@@ -133,16 +235,16 @@ button{font:inherit;cursor:pointer;border:none;background:none;color:inherit}
 .avatar{
   width:60px;height:60px;border-radius:18px;flex-shrink:0;
   display:grid;place-items:center;font-weight:800;font-size:20px;color:#fff;
-  letter-spacing:-.02em;box-shadow:0 8px 20px -6px rgba(15,23,42,.4);
+  letter-spacing:-.02em;box-shadow:0 8px 20px -6px rgba(120,53,15,.35);
   transition:transform .3s ease;
 }
 .teacher:hover .avatar { transform: scale(1.05) rotate(-3deg); }
 
-.a1{background:linear-gradient(135deg,#4f46e5,#7c3aed)}
-.a2{background:linear-gradient(135deg,#0284c7,#0ea5e9)}
-.a3{background:linear-gradient(135deg,#ea580c,#f97316)}
-.a4{background:linear-gradient(135deg,#059669,#10b981)}
-.a5{background:linear-gradient(135deg,#db2777,#ec4899)}
+.a1{background:linear-gradient(135deg,#b8860b,#d4af37)}
+.a2{background:linear-gradient(135deg,#a0522d,#cd853f)}
+.a3{background:linear-gradient(135deg,#8b4513,#a0522d)}
+.a4{background:linear-gradient(135deg,#556b2f,#6b8e23)}
+.a5{background:linear-gradient(135deg,#8b0000,#a52a2a)}
 
 .teacher__name{font-size:17px;font-weight:800;letter-spacing:-.01em;line-height:1.3;}
 .teacher__subject{font-size:14px;color:var(--text-muted);font-weight:500;margin-top:4px;}
@@ -219,9 +321,11 @@ button{font:inherit;cursor:pointer;border:none;background:none;color:inherit}
 </head>
 <body>
 
+<div class="leaves-container" id="leaves"></div>
+
 <header class="header">
   <div class="container header__inner">
-    <a href="#" class="logo">
+    <a href="https://mektebmmuzyka-commits.github.io/MuzMektep/" class="logo">
       <img src="img/logo.png" alt="Мұқан Төлебаев атындағы БММ" class="logo__img">
       <div class="logo__text">
         <strong>Мұқан Төлебаев атындағы</strong>
@@ -230,9 +334,8 @@ button{font:inherit;cursor:pointer;border:none;background:none;color:inherit}
     </a>
 
     <nav class="nav" id="nav">
-      <a href="#teachers" class="nav__link">Педагогтер</a>
-      <a href="#teachers" class="nav__link">ҚМЖ</a>
-      <a href="#teachers" class="nav__link">Презентациялар</a>
+      <a href="https://mektebmmuzyka-commits.github.io/MuzMektep/" class="nav__link active">Семинарлар</a>
+      <a href="АДРЕС_ВТОРОГО_САЙТА" class="nav__link">Кері байланыс</a>
     </nav>
 
     <div class="header__actions">
@@ -261,7 +364,6 @@ button{font:inherit;cursor:pointer;border:none;background:none;color:inherit}
 
     <div class="teachers" id="teachersGrid">
 
-      <!-- 1. Жақсылықова -->
       <article class="teacher" data-search="жақсылықова аружан фортепиано 1 сынып бір пернеден әуенге">
         <div class="teacher__head"><div class="avatar a1">ЖА</div><div><div class="teacher__name">Жақсылықова Аружан Болатқызы</div><div class="teacher__subject">Фортепиано</div></div></div>
         <div class="lesson-topic"><span>Сабақтың тақырыбы:</span>«Бір пернеден – бір әуенге»</div>
@@ -282,7 +384,6 @@ button{font:inherit;cursor:pointer;border:none;background:none;color:inherit}
         </div>
       </article>
 
-      <!-- 2. Төреханова -->
       <article class="teacher" data-search="төреханова сольфеджио 1 сынып ноталар әлеміне саяхат">
         <div class="teacher__head"><div class="avatar a2">ТТ</div><div><div class="teacher__name">Төреханова Т.М</div><div class="teacher__subject">Сольфеджио</div></div></div>
         <div class="lesson-topic"><span>Сабақтың тақырыбы:</span>«Ноталар әлеміне саяхат»</div>
@@ -303,7 +404,6 @@ button{font:inherit;cursor:pointer;border:none;background:none;color:inherit}
         </div>
       </article>
 
-      <!-- 3. Джиенбетова -->
       <article class="teacher" data-search="джиенбетова лескуль вокал 1 сынып сахналық мәдениет">
         <div class="teacher__head"><div class="avatar a3">ДЛ</div><div><div class="teacher__name">Джиенбетова Лескуль Абдикашевна</div><div class="teacher__subject">Вокал</div></div></div>
         <div class="lesson-topic"><span>Сабақтың тақырыбы:</span>«Вокал сабағында сахналық мәдениетті қалыптастыру»</div>
@@ -324,7 +424,6 @@ button{font:inherit;cursor:pointer;border:none;background:none;color:inherit}
         </div>
       </article>
 
-      <!-- 4. Ауелбеков -->
       <article class="teacher" data-search="ауелбеков султан вокал 1 сынып дұрыс артикуляция">
         <div class="teacher__head"><div class="avatar a4">АС</div><div><div class="teacher__name">Ауелбеков Султан Мейрбекулы</div><div class="teacher__subject">Академиялық вокал</div></div></div>
         <div class="lesson-topic"><span>Сабақтың тақырыбы:</span>«Дұрыс артикуляция – анық ән айту негізі»</div>
@@ -345,7 +444,6 @@ button{font:inherit;cursor:pointer;border:none;background:none;color:inherit}
         </div>
       </article>
 
-      <!-- 5. Омарбеков (Думан) -->
       <article class="teacher" data-search="омарбеков думан домбыра 3 сынып жасанды интеллект дәстүр технология үндестігі">
         <div class="teacher__head">
           <div class="avatar a5">ОД</div>
@@ -364,25 +462,15 @@ button{font:inherit;cursor:pointer;border:none;background:none;color:inherit}
         </div>
         <div class="teacher__files">
           <a class="download-btn download-btn--pdf" href="doks/DumanWord.pdf" download>
-            <span class="download-btn__row">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M12 18v-6M9 15l3 3 3-3"/></svg>
-              ҚМЖ (PDF)
-            </span>
+            <span class="download-btn__row"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M12 18v-6M9 15l3 3 3-3"/></svg>ҚМЖ (PDF)</span>
             <span class="download-btn__sub">Қарау үшін · .pdf</span>
           </a>
           <a class="download-btn download-btn--word" href="doks/Duman.docx" download>
-            <span class="download-btn__row">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M12 18v-6M9 15l3 3 3-3"/></svg>
-              ҚМЖ (Word)
-            </span>
+            <span class="download-btn__row"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M12 18v-6M9 15l3 3 3-3"/></svg>ҚМЖ (Word)</span>
             <span class="download-btn__sub">Өңдеу үшін · .docx</span>
           </a>
-          <!-- Добавлена кнопка презентации для Думана -->
           <a class="download-btn download-btn--ppt download-btn--wide" href="doks/Duman.pdf" download>
-            <span class="download-btn__row">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M12 18v-6M9 15l3 3 3-3"/></svg>
-              Презентация (PDF)
-            </span>
+            <span class="download-btn__row"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M12 18v-6M9 15l3 3 3-3"/></svg>Презентация (PDF)</span>
             <span class="download-btn__sub">Қарау үшін · .pdf</span>
           </a>
         </div>
@@ -430,6 +518,39 @@ themeToggle.addEventListener('click', () => {
   const cur = document.documentElement.getAttribute('data-theme');
   setTheme(cur === 'dark' ? 'light' : 'dark');
 });
+
+/* ---------- Падающие лепестки (ТОЛЬКО на ПК) ---------- */
+(function createLeaves() {
+  if (window.innerWidth < 768) return;
+  
+  const leavesContainer = document.getElementById('leaves');
+  const leavesCount = 22;
+  for (let i = 0; i < leavesCount; i++) {
+    const leaf = document.createElement('div');
+    leaf.className = 'leaf';
+    const img = document.createElement('img');
+    img.src = 'img/lep.png';
+    leaf.appendChild(img);
+    
+    const size = 18 + Math.random() * 37;
+    const duration = size > 40 ? 16 + Math.random() * 8 : 9 + Math.random() * 6;
+    const delay = -Math.random() * 25;
+    const leftPos = Math.random() * 100;
+    const sway = (Math.random() > 0.5 ? 1 : -1) * (60 + Math.random() * 100);
+    const opacity = 0.55 + Math.random() * 0.45;
+    const blur = size > 40 ? 0 : Math.random() * 1.2;
+
+    leaf.style.left = leftPos + '%';
+    leaf.style.width = size + 'px';
+    leaf.style.height = size + 'px';
+    leaf.style.animationDuration = duration + 's';
+    leaf.style.animationDelay = delay + 's';
+    leaf.style.opacity = opacity;
+    leaf.style.setProperty('--sway', sway + 'px');
+    if (blur > 0.3) leaf.style.filter = `drop-shadow(0 3px 4px rgba(120,53,15,.2)) blur(${blur}px)`;
+    leavesContainer.appendChild(leaf);
+  }
+})();
 </script>
 </body>
 </html>
